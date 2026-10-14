@@ -1,0 +1,12 @@
+{
+  "name": "Discipline",
+  "short_name": "Discipline",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#090b11",
+  "theme_color": "#090b11",
+  "icons": [
+    {"src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

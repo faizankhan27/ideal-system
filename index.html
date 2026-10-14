@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07090e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Discipline</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--void:#07090e;--pewter:#9aa2b1;--silver:#e8ebf1;--ember:#ffeecb;--glow:rgba(255,236,190,.55);
+color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--void)}
+body{margin:0;min-height:100vh;background:transparent;color:var(--silver);font:500 19px/1.5 "Cormorant Garamond",Georgia,serif}
+.stage{position:fixed;inset:0;z-index:-1;margin:0 auto;max-width:560px;background:linear-gradient(180deg,rgba(7,9,14,.05) 0%,rgba(7,9,14,.3) 36%,rgba(7,9,14,.84) 60%,#07090e 80%),url(bg.jpg) 50% 0/cover no-repeat,var(--void)}
+.glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 48% 15% at 54% 25%,rgba(255,236,190,.6),transparent 72%);mix-blend-mode:screen;opacity:var(--lit,0);transition:opacity 2s}
+main{max-width:460px;margin:0 auto;padding:14px 18px 44px;text-align:center}
+.hero{position:relative;height:40vh;min-height:250px}
+.brand{position:absolute;top:6px;left:0;right:0;z-index:2;font:500 .8rem Cinzel,Georgia,serif;letter-spacing:.55em;color:var(--silver);margin:0;padding-left:.55em;text-shadow:0 0 14px rgba(0,0,0,.9)}
+.hero::before{content:"";position:absolute;inset:8% -10% 0;background:radial-gradient(ellipse 50% 55% at 50% 58%,rgba(150,160,185,.3),transparent 70%);opacity:0;transition:opacity .8s}
+body.art .hero{height:52vh;min-height:330px;margin-bottom:22px}
+body.art .hero::before{opacity:1}
+body.art .hero::after{content:"";position:absolute;left:50%;bottom:0;width:64%;height:16px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(255,236,190,.4),transparent 70%)}
+body.art .stage::before{content:"";position:absolute;inset:0;background:rgba(7,9,14,.82)}
+body.art .glow{display:none}
+#fig{display:none;position:absolute;left:50%;bottom:6px;height:86%;width:auto;max-width:100%;transform:translateX(-50%);object-fit:contain;filter:drop-shadow(0 0 1px rgba(255,255,255,.55)) drop-shadow(0 0 16px rgba(255,236,190,.14)) drop-shadow(0 14px 14px rgba(0,0,0,.65));animation:figin .9s ease-out}
+body.art #fig{display:block}
+@keyframes figin{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%)}}
+.plate{position:relative;border-radius:20px;background:linear-gradient(170deg,rgba(32,39,53,.6),rgba(8,11,17,.74));-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);box-shadow:0 20px 46px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+.plate::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(155deg,rgba(255,255,255,.45),rgba(255,255,255,.05) 45%,rgba(255,236,190,.22));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);pointer-events:none}
+.card{padding:22px 18px 20px}
+.rankline{display:flex;align-items:center;gap:14px}
+.rankline span{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(214,218,226,.5))}
+.rankline span:last-child{transform:scaleX(-1)}
+.rank{margin:0;padding-left:.3em;font:700 1rem Cinzel,Georgia,serif;letter-spacing:.32em;white-space:nowrap;color:var(--silver)}
+.big{margin:10px 0 0}
+.big b{display:block;font:700 4.8rem/1 Cinzel,Georgia,serif;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fffaf0,#ffe2a6);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px var(--glow))}
+.big small,.unit span,.stats small{font-size:.85rem;letter-spacing:.2em;color:var(--pewter);text-transform:uppercase}
+.hms{display:flex;justify-content:center;align-items:flex-start;gap:10px;margin-top:16px}
+.unit{min-width:3.4rem}
+.unit b,.hms em{display:block;font:500 1.9rem/1.15 Cinzel,Georgia,serif;font-variant-numeric:tabular-nums;color:var(--silver)}
+.hms em{font-style:normal;color:var(--pewter);animation:blink 2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.unit span{display:block;font-size:.7rem;margin-top:2px}
+.bar{height:4px;background:rgba(255,255,255,.09);margin:22px 8px 12px;border-radius:4px}
+.bar i{display:block;position:relative;height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,rgba(125,134,150,.6),var(--ember));transition:width 1s}
+.bar i::after{content:"";position:absolute;right:-4px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:#fff6e0;box-shadow:0 0 10px 3px var(--glow)}
+.note{margin:2px 0;color:var(--pewter);font-style:italic;font-size:.95rem}
+.stats{display:grid;grid-template-columns:1fr 1fr;margin:14px 0 22px;padding:16px 0 14px}
+.stats>div+div{border-left:1px solid rgba(255,255,255,.1)}
+.stats strong{display:block;font:500 1.15rem Cinzel,Georgia,serif;color:var(--silver);margin-bottom:2px}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible{outline:2px solid var(--ember);outline-offset:3px}
+#relapse{width:100%;padding:17px;border-radius:16px;background:linear-gradient(170deg,rgba(32,39,53,.6),rgba(8,11,17,.74));-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--silver);border:1px solid rgba(255,255,255,.2);font:500 .98rem Cinzel,Georgia,serif;letter-spacing:.28em;padding-left:calc(17px + .28em);transition:border-color .25s,box-shadow .25s}
+#relapse:active{border-color:var(--ember);box-shadow:0 0 24px var(--glow)}
+.hint{margin:12px 0 0;color:var(--pewter);font-style:italic;font-size:.92rem}
+.hist{margin-top:34px;text-align:left}
+.hist h2{font:500 .9rem Cinzel,Georgia,serif;letter-spacing:.3em;color:var(--pewter);text-align:center;margin:0 0 6px}
+.hist div div{display:flex;justify-content:space-between;padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.07)}
+.hist span{color:var(--pewter)}
+#veil{position:fixed;inset:0;z-index:5;display:none;align-items:center;justify-content:center;padding:26px;background:radial-gradient(circle at 50% 30%,rgba(40,34,26,.5),rgba(4,5,8,.95) 70%);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#veil.on{display:flex;animation:rise .45s ease-out}
+@keyframes rise{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+#veil .plate{width:100%;max-width:420px;padding:34px 22px 22px}
+#veil h2{font:500 .95rem Cinzel,Georgia,serif;letter-spacing:.3em;color:var(--pewter);margin:0 0 16px}
+#task{font-size:1.75rem;line-height:1.28;font-weight:600;color:var(--ember);text-shadow:0 0 18px var(--glow);margin:0 0 18px}
+#tw{font:700 1.7rem Cinzel,Georgia,serif;color:var(--silver);font-variant-numeric:tabular-nums;margin:0 0 4px}
+#done{width:100%;margin-top:20px;padding:15px;border:0;border-radius:14px;background:linear-gradient(#fff,#a9b1be);color:#10131a;font:700 .95rem Cinzel,Georgia,serif;letter-spacing:.2em}
+#undo{margin-top:16px;background:none;border:0;color:var(--pewter);text-decoration:underline;font-size:.95rem}
+@media (prefers-reduced-motion:reduce){#fig,#veil.on,.hms em{animation:none}.glow,.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="stage"><div class="glow"></div></div>
+<main>
+<header class="hero"><p class="brand">DISCIPLINE</p><img id="fig" alt="Your current rank character"></header>
+<section class="plate card">
+<div class="rankline"><span></span><p class="rank" id="rank"></p><span></span></div>
+<div class="big"><b id="d">0</b><small>days held</small></div>
+<div class="hms"><div class="unit"><b id="h">00</b><span>hours</span></div><em>:</em><div class="unit"><b id="m">00</b><span>minutes</span></div><em>:</em><div class="unit"><b id="s">00</b><span>seconds</span></div></div>
+<div class="bar"><i id="bar"></i></div>
+<p class="note" id="next"></p><p class="note" id="since"></p>
+</section>
+<div class="plate stats">
+<div><strong id="best">0d 00h 00m</strong><small>Best streak</small></div>
+<div><strong id="count">0</strong><small>Trials endured</small></div>
+</div>
+<button id="relapse">I RELAPSED</button>
+<p class="hint">Be honest. A trial begins the moment you tap.</p>
+<section class="hist" id="hist" hidden><h2>CHRONICLE</h2><div id="list"></div></section>
+</main>
+<div id="veil" role="dialog" aria-modal="true" aria-labelledby="vt">
+<div class="plate"><h2 id="vt">FACE YOUR TRIAL</h2><p id="task"></p><p class="note">Time on trial</p><p id="tw">00:00</p>
+<button id="done">TRIAL COMPLETE</button><button id="undo">I tapped by mistake</button></div>
+</div>
+<script>
+const TASKS=[
+"100 pushups. Break them into sets if you must, but finish now.",
+"Hold a plank until you shake, rest 30 seconds, then hold it again.",
+"50 burpees without sitting down.",
+"150 squats at a steady pace.",
+"Wall sit for 3 minutes straight.",
+"200 jumping jacks, softly if the house is asleep.",
+"100 lunges, 50 on each leg.",
+"5 rounds of 10 pushups, 15 squats and 20 situps.",
+"100 situps with no long breaks.",
+"Hold a deep squat for 2 minutes, then do 30 more squats.",
+"5 sets of 60 mountain climbers with 30 seconds rest between sets.",
+"Run in place at full speed for 5 minutes.",
+"100 calf raises, then 50 slow pushups.",
+"Climb the stairs 15 times, fast up and slow down.",
+"40 slow pushups, 3 seconds down and 3 seconds up.",
+"Stand with your arms held straight out for 3 minutes.",
+"Write \"I am in control of my choices\" by hand 100 times.",
+"Write a full page by hand on why you started this, then read it aloud quietly.",
+"Memorize 10 lines of any text and write them out from memory.",
+"Study something difficult for 30 minutes with your phone out of reach.",
+"Deep clean one whole area of your room, phone away.",
+"10 minutes of box breathing, then write down exactly what triggered you.",
+"Read 15 pages of something hard, then write a 5 sentence summary.",
+"30 minutes on the hardest item on your to do list, starting now.",
+"3 rounds of 20 squats, 15 pushups and a 30 second plank, no rest between rounds."];
+const R=[[0,"UNSWORN"],[1,"SQUIRE"],[3,"SENTINEL"],[7,"KNIGHT"],[14,"WARDEN"],[30,"PALADIN"],[60,"LORD COMMANDER"],[90,"CROWNED"]];
+const ART={0:"rank-0.webp",1:"rank-1.webp",2:"rank-2.webp",3:"rank-3.webp",4:"rank-4.webp",5:"rank-5.webp",6:"rank-6.webp",7:"rank-7.webp"};
+const $=id=>document.getElementById(id),K="discipline_v1";
+let curArt=-1;const fig=$("fig");
+function art(i){if(i===curArt)return;curArt=i;document.body.classList.remove("art");const u=ART[i];if(!u)return;
+fig.onload=()=>document.body.classList.add("art");fig.onerror=()=>document.body.classList.remove("art");fig.src=u}
+let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
+S=S||{start:Date.now(),best:0,hist:[],done:0,last:-1,prev:null,trial:null,tstart:0};
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};save();
+const p2=n=>String(n).padStart(2,"0");
+const parts=ms=>{const t=Math.floor(ms/1e3);return{d:Math.floor(t/86400),h:Math.floor(t%86400/3600),m:Math.floor(t%3600/60),s:t%60}};
+const short=ms=>{const x=parts(ms);return x.d+"d "+p2(x.h)+"h "+p2(x.m)+"m"};
+function tick(){const now=Date.now(),e=now-S.start,x=parts(e),dd=e/864e5;
+$("d").textContent=x.d;$("h").textContent=p2(x.h);$("m").textContent=p2(x.m);$("s").textContent=p2(x.s);
+$("best").textContent=short(Math.max(S.best,e));
+let i=0;R.forEach((r,j)=>{if(dd>=r[0])i=j});const n=R[i+1];
+$("rank").textContent=R[i][1];art(i);
+if(n){$("bar").style.width=((dd-R[i][0])/(n[0]-R[i][0])*100).toFixed(1)+"%";$("next").textContent=n[1].charAt(0)+n[1].slice(1).toLowerCase()+" in "+short(n[0]*864e5-e)}
+else{$("bar").style.width="100%";$("next").textContent="The crown is complete. Hold the line."}
+document.documentElement.style.setProperty("--lit",(.25+Math.min(1,dd/30)*.75).toFixed(2));
+if(S.trial!=null){const t=Math.floor((now-S.tstart)/1e3);$("tw").textContent=p2(Math.floor(t/60))+":"+p2(t%60)}}
+function render(){$("since").textContent="Since "+new Date(S.start).toLocaleString([],{dateStyle:"medium",timeStyle:"short"});
+$("count").textContent=S.done;$("hist").hidden=!S.hist.length;$("list").innerHTML="";
+S.hist.forEach(r=>{const row=document.createElement("div"),a=document.createElement("span");a.textContent=new Date(r.at).toLocaleDateString([],{dateStyle:"medium"});row.append(a,short(r.len));$("list").append(row)});tick()}
+const show=()=>{$("task").textContent=TASKS[S.trial];$("veil").classList.add("on")};
+$("relapse").onclick=()=>{const now=Date.now(),e=now-S.start;S.prev=null;S.prev=JSON.parse(JSON.stringify(S));
+S.best=Math.max(S.best,e);S.hist.unshift({at:now,len:e});S.hist=S.hist.slice(0,10);S.start=now;
+let i;do{i=Math.floor(Math.random()*TASKS.length)}while(i===S.last);
+S.last=i;S.trial=i;S.tstart=now;save();show();render()};
+$("done").onclick=()=>{S.done++;S.trial=null;S.prev=null;save();$("veil").classList.remove("on");render()};
+$("undo").onclick=()=>{if(S.prev)S=S.prev;S.prev=null;S.trial=null;save();$("veil").classList.remove("on");render()};
+render();if(S.trial!=null)show();setInterval(tick,1000);
+if("serviceWorker" in navigator&&location.protocol.startsWith("http")){try{navigator.serviceWorker.register("sw.js").catch(()=>{})}catch(e){}}
+</script>
+</body>
+</html>
