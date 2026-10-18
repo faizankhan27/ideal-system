@@ -61,7 +61,6 @@ button:focus-visible{outline:2px solid var(--ember);outline-offset:3px}
 .hint{margin:12px 0 0;color:var(--pewter);font-style:italic;font-size:.92rem}
 .hist{margin-top:34px;text-align:left}
 .hist h2{font:500 .9rem Cinzel,Georgia,serif;letter-spacing:.3em;color:var(--pewter);text-align:center;margin:0 0 6px}
-.hist div div{display:flex;justify-content:space-between;padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.07)}
 .hist span{color:var(--pewter)}
 #veil{position:fixed;inset:0;z-index:5;display:none;align-items:center;justify-content:center;padding:26px;background:radial-gradient(circle at 50% 30%,rgba(40,34,26,.5),rgba(4,5,8,.95) 70%);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 #veil.on{display:flex;animation:rise .45s ease-out}
@@ -72,6 +71,25 @@ button:focus-visible{outline:2px solid var(--ember);outline-offset:3px}
 #tw{font:700 1.7rem Cinzel,Georgia,serif;color:var(--silver);font-variant-numeric:tabular-nums;margin:0 0 4px}
 #done{width:100%;margin-top:20px;padding:15px;border:0;border-radius:14px;background:linear-gradient(#fff,#a9b1be);color:#10131a;font:700 .95rem Cinzel,Georgia,serif;letter-spacing:.2em}
 #undo{margin-top:16px;background:none;border:0;color:var(--pewter);text-decoration:underline;font-size:.95rem}
+.prompt{margin:0 0 14px;font-size:1.12rem;line-height:1.4;color:var(--ember)}
+#txt{width:100%;min-height:200px;padding:14px;border-radius:14px;background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.18);color:var(--silver);font:500 1.08rem/1.5 "Cormorant Garamond",Georgia,serif;resize:vertical;outline:none}
+#txt:focus{border-color:rgba(255,236,190,.6);box-shadow:0 0 0 3px rgba(255,236,190,.1)}
+.wc{margin:8px 2px 16px;text-align:right;font-size:.9rem;color:var(--pewter)}.wc.ok{color:var(--ember)}
+.sub{margin:0 0 8px;font-size:.95rem;color:var(--pewter)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);color:var(--silver);font-size:.92rem}
+.chip.on{background:rgba(255,236,190,.16);border-color:var(--ember);color:var(--ember)}
+#done:disabled{opacity:.35;cursor:not-allowed}
+#veil{overflow-y:auto;align-items:flex-start}
+#veil .plate{margin:auto;text-align:left}
+#veil h2{text-align:center}
+.entry{margin:10px 0;padding:14px 16px;border-radius:16px;background:rgba(10,13,19,.62);border:1px solid rgba(255,255,255,.1);cursor:pointer}
+.eh{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.eh b{font:500 .95rem Cinzel,Georgia,serif;color:var(--silver)}.eh span{color:var(--pewter);font-size:.92rem}
+.tg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tg i{font-style:normal;font-size:.8rem;padding:2px 9px;border-radius:999px;border:1px solid rgba(255,236,190,.35);color:var(--ember)}
+.et{margin:8px 0 0;font-size:1.02rem;line-height:1.45;color:#c9ced8;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.entry.open .et{display:block}
 @media (prefers-reduced-motion:reduce){#fig,#veil.on,.hms em{animation:none}.glow,.bar i{transition:none}}
 </style>
 </head>
@@ -88,43 +106,21 @@ button:focus-visible{outline:2px solid var(--ember);outline-offset:3px}
 </section>
 <div class="plate stats">
 <div><strong id="best">0d 00h 00m</strong><small>Best streak</small></div>
-<div><strong id="count">0</strong><small>Trials endured</small></div>
+<div><strong id="count">0</strong><small>Entries logged</small></div>
 </div>
 <button id="relapse">I RELAPSED</button>
-<p class="hint">Be honest. A trial begins the moment you tap.</p>
-<section class="hist" id="hist" hidden><h2>CHRONICLE</h2><div id="list"></div></section>
+<p class="hint">Be honest. You will write down exactly what led to it.</p>
+<section class="hist" id="hist" hidden><h2>JOURNAL</h2><p class="note" id="insight" style="text-align:center"></p><div id="list"></div></section>
 </main>
 <div id="veil" role="dialog" aria-modal="true" aria-labelledby="vt">
-<div class="plate"><h2 id="vt">FACE YOUR TRIAL</h2><p id="task"></p><p class="note">Time on trial</p><p id="tw">00:00</p>
-<button id="done">TRIAL COMPLETE</button><button id="undo">I tapped by mistake</button></div>
+<div class="plate"><h2 id="vt">WRITE IT OUT</h2>
+<p class="prompt">Be honest and detailed. What led up to this? Why did you do it? What were you feeling before, during and after?</p>
+<textarea id="txt" rows="9" placeholder="Start from the moment the urge began. Where were you, what time was it, what was on your mind, and what happened next?"></textarea>
+<p class="wc" id="wc">0 of 50 words</p>
+<p class="sub">What set it off? Tap any that fit.</p><div class="chips" id="chips"></div>
+<button id="done" disabled>SAVE ENTRY</button><button id="undo">I tapped by mistake</button></div>
 </div>
 <script>
-const TASKS=[
-"100 pushups. Break them into sets if you must, but finish now.",
-"Hold a plank until you shake, rest 30 seconds, then hold it again.",
-"50 burpees without sitting down.",
-"150 squats at a steady pace.",
-"Wall sit for 3 minutes straight.",
-"200 jumping jacks, softly if the house is asleep.",
-"100 lunges, 50 on each leg.",
-"5 rounds of 10 pushups, 15 squats and 20 situps.",
-"100 situps with no long breaks.",
-"Hold a deep squat for 2 minutes, then do 30 more squats.",
-"5 sets of 60 mountain climbers with 30 seconds rest between sets.",
-"Run in place at full speed for 5 minutes.",
-"100 calf raises, then 50 slow pushups.",
-"Climb the stairs 15 times, fast up and slow down.",
-"40 slow pushups, 3 seconds down and 3 seconds up.",
-"Stand with your arms held straight out for 3 minutes.",
-"Write \"I am in control of my choices\" by hand 100 times.",
-"Write a full page by hand on why you started this, then read it aloud quietly.",
-"Memorize 10 lines of any text and write them out from memory.",
-"Study something difficult for 30 minutes with your phone out of reach.",
-"Deep clean one whole area of your room, phone away.",
-"10 minutes of box breathing, then write down exactly what triggered you.",
-"Read 15 pages of something hard, then write a 5 sentence summary.",
-"30 minutes on the hardest item on your to do list, starting now.",
-"3 rounds of 20 squats, 15 pushups and a 30 second plank, no rest between rounds."];
 const R=[[0,"UNSWORN"],[1,"SQUIRE"],[3,"SENTINEL"],[7,"KNIGHT"],[14,"WARDEN"],[30,"PALADIN"],[60,"LORD COMMANDER"],[90,"CROWNED"]];
 const ART={0:"rank-0.webp",1:"rank-1.webp",2:"rank-2.webp",3:"rank-3.webp",4:"rank-4.webp",5:"rank-5.webp",6:"rank-6.webp",7:"rank-7.webp"};
 const $=id=>document.getElementById(id),K="discipline_v1";
@@ -132,7 +128,8 @@ let curArt=-1;const fig=$("fig");
 function art(i){if(i===curArt)return;curArt=i;document.body.classList.remove("art");const u=ART[i];if(!u)return;
 fig.onload=()=>document.body.classList.add("art");fig.onerror=()=>document.body.classList.remove("art");fig.src=u}
 let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
-S=S||{start:Date.now(),best:0,hist:[],done:0,last:-1,prev:null,trial:null,tstart:0};
+S=S||{start:Date.now(),best:0,log:[],prev:null,pend:null,draft:"",tags:[]};
+if(!S.log)S.log=(S.hist||[]).map(r=>({at:r.at,len:r.len,tags:[],text:""}));S.tags=S.tags||[];S.draft=S.draft||"";S.pend=S.pend||null;
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};save();
 const p2=n=>String(n).padStart(2,"0");
 const parts=ms=>{const t=Math.floor(ms/1e3);return{d:Math.floor(t/86400),h:Math.floor(t%86400/3600),m:Math.floor(t%3600/60),s:t%60}};
@@ -145,18 +142,36 @@ $("rank").textContent=R[i][1];art(i);
 if(n){$("bar").style.width=((dd-R[i][0])/(n[0]-R[i][0])*100).toFixed(1)+"%";$("next").textContent=n[1].charAt(0)+n[1].slice(1).toLowerCase()+" in "+short(n[0]*864e5-e)}
 else{$("bar").style.width="100%";$("next").textContent="The crown is complete. Hold the line."}
 document.documentElement.style.setProperty("--lit",(.25+Math.min(1,dd/30)*.75).toFixed(2));
-if(S.trial!=null){const t=Math.floor((now-S.tstart)/1e3);$("tw").textContent=p2(Math.floor(t/60))+":"+p2(t%60)}}
-function render(){$("since").textContent="Since "+new Date(S.start).toLocaleString([],{dateStyle:"medium",timeStyle:"short"});
-$("count").textContent=S.done;$("hist").hidden=!S.hist.length;$("list").innerHTML="";
-S.hist.forEach(r=>{const row=document.createElement("div"),a=document.createElement("span");a.textContent=new Date(r.at).toLocaleDateString([],{dateStyle:"medium"});row.append(a,short(r.len));$("list").append(row)});tick()}
-const show=()=>{$("task").textContent=TASKS[S.trial];$("veil").classList.add("on")};
+}
+const MIN=50,TAGS=["Bored","Stressed","Lonely","Tired","Late night","Anxious","Phone","Social media","Alone at home","Other"];
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const words=t=>(t.trim().match(/\S+/g)||[]).length;
+function render(){
+$("since").textContent="Since "+new Date(S.start).toLocaleString([],{dateStyle:"medium",timeStyle:"short"});
+$("count").textContent=S.log.filter(r=>r.text).length;
+$("hist").hidden=!S.log.length;
+const L=$("list");L.innerHTML="";
+const tc={};S.log.forEach(r=>r.tags.forEach(t=>tc[t]=(tc[t]||0)+1));
+const top=Object.entries(tc).sort((a,b)=>b[1]-a[1]).slice(0,3);
+$("insight").textContent=top.length?"Most common triggers: "+top.map(x=>x[0]+" ("+x[1]+")").join(", "):"";
+S.log.forEach(r=>{const c=el("div","entry"),h=el("div","eh");
+h.append(el("b",null,new Date(r.at).toLocaleDateString([],{dateStyle:"medium"})),el("span",null,"held "+short(r.len)));c.append(h);
+if(r.tags.length){const g=el("div","tg");r.tags.forEach(t=>g.append(el("i",null,t)));c.append(g)}
+c.append(el("p","et",r.text||"No note was written for this one."));
+c.onclick=()=>c.classList.toggle("open");L.append(c)});
+tick()}
+const chips=$("chips");
+function paint(){chips.childNodes.forEach(b=>b.classList.toggle("on",S.tags.includes(b.textContent)));
+const n=words($("txt").value);$("wc").textContent=n+" of "+MIN+" words";$("wc").classList.toggle("ok",n>=MIN);$("done").disabled=n<MIN}
+TAGS.forEach(t=>{const b=el("button","chip",t);b.type="button";b.onclick=()=>{const i=S.tags.indexOf(t);i<0?S.tags.push(t):S.tags.splice(i,1);save();paint()};chips.append(b)});
+function showNote(){$("txt").value=S.draft||"";paint();$("veil").classList.add("on");setTimeout(()=>$("txt").focus(),350)}
+$("txt").oninput=()=>{S.draft=$("txt").value;save();paint()};
 $("relapse").onclick=()=>{const now=Date.now(),e=now-S.start;S.prev=null;S.prev=JSON.parse(JSON.stringify(S));
-S.best=Math.max(S.best,e);S.hist.unshift({at:now,len:e});S.hist=S.hist.slice(0,10);S.start=now;
-let i;do{i=Math.floor(Math.random()*TASKS.length)}while(i===S.last);
-S.last=i;S.trial=i;S.tstart=now;save();show();render()};
-$("done").onclick=()=>{S.done++;S.trial=null;S.prev=null;save();$("veil").classList.remove("on");render()};
-$("undo").onclick=()=>{if(S.prev)S=S.prev;S.prev=null;S.trial=null;save();$("veil").classList.remove("on");render()};
-render();if(S.trial!=null)show();setInterval(tick,1000);
+S.best=Math.max(S.best,e);S.pend={at:now,len:e};S.start=now;S.draft="";S.tags=[];save();showNote();render()};
+$("done").onclick=()=>{const t=$("txt").value.trim();if(words(t)<MIN||!S.pend)return;
+S.log.unshift({at:S.pend.at,len:S.pend.len,tags:S.tags.slice(),text:t});S.pend=null;S.draft="";S.tags=[];S.prev=null;save();$("veil").classList.remove("on");render()};
+$("undo").onclick=()=>{if(S.prev)S=S.prev;S.prev=null;S.pend=null;S.draft="";S.tags=[];save();$("veil").classList.remove("on");render()};
+render();if(S.pend)showNote();setInterval(tick,1000);
 if("serviceWorker" in navigator&&location.protocol.startsWith("http")){try{navigator.serviceWorker.register("sw.js").catch(()=>{})}catch(e){}}
 </script>
 </body>
